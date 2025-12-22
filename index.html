@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GenRe Banda Aceh</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="hero">
+    <div class="container">
+      <h1>GenRe Banda Aceh</h1>
+      <p>Ruang aman tumbuh, peduli, dan berkembang bersama remaja</p>
+      <div class="hero-actions">
+        <a class="btn btn-ghost" href="#mental">Cek Mood</a>
+        <a class="btn" href="#curhat">Curhat Anonim</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAV -->
+  <nav class="topnav" aria-label="Navigasi utama">
+    <div class="container nav-inner">
+      <div class="brand">GenRe</div>
+      <div class="navlinks">
+        <a href="#tentang">Tentang</a>
+        <a href="#mental">Mental</a>
+        <a href="#curhat">Curhat</a>
+        <a href="#challenge">Challenge</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- TENTANG GENRE -->
+  <main>
+    <section id="tentang" class="section">
+      <div class="container">
+        <h2>Tentang GenRe Banda Aceh</h2>
+        <div class="card">
+          <p>
+            GenRe (Generasi Berencana) Banda Aceh hadir sebagai wadah edukasi dan pendampingan
+            remaja untuk membangun masa depan yang sehat secara fisik, mental, dan sosial.
+          </p>
+          <p>
+            Kami percaya bahwa setiap remaja berhak mendapatkan ruang aman untuk belajar,
+            berbagi, dan tumbuh tanpa stigma.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDUKASI MENTAL -->
+    <section id="mental" class="section alt">
+      <div class="container">
+        <h2>Edukasi Kesehatan Mental</h2>
+
+        <div class="grid">
+          <div class="card">
+            <p><strong>Contoh pertanyaan refleksi diri:</strong></p>
+            <ul>
+              <li>Akhir-akhir ini aku sering merasa lelah secara emosional</li>
+              <li>Aku merasa memiliki tempat yang aman untuk bercerita</li>
+              <li>Aku mampu menghargai diriku sendiri</li>
+            </ul>
+            <p class="muted">
+              Catatan: ini <em>bukan</em> alat diagnosis. Ini hanya langkah awal untuk lebih peduli pada diri sendiri.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title">Cek Mood Singkat (1 menit)</h3>
+
+            <form id="mentalForm" class="form" autocomplete="off">
+              <label for="q1">1) Dalam 7 hari terakhir, seberapa sering kamu merasa cemas?</label>
+              <select id="q1" required>
+                <option value="" selected disabled>Pilih jawaban…</option>
+                <option value="0">Tidak pernah</option>
+                <option value="1">Kadang-kadang</option>
+                <option value="2">Sering</option>
+                <option value="3">Hampir setiap hari</option>
+              </select>
+
+              <label for="q2">2) Seberapa sering kamu merasa sedih/putus asa?</label>
+              <select id="q2" required>
+                <option value="" selected disabled>Pilih jawaban…</option>
+                <option value="0">Tidak pernah</option>
+                <option value="1">Kadang-kadang</option>
+                <option value="2">Sering</option>
+                <option value="3">Hampir setiap hari</option>
+              </select>
+
+              <label for="q3">3) Apakah kamu merasa punya dukungan (teman/keluarga/mentor)?</label>
+              <select id="q3" required>
+                <option value="" selected disabled>Pilih jawaban…</option>
+                <option value="0">Ya, kuat</option>
+                <option value="1">Lumayan</option>
+                <option value="2">Sedikit</option>
+                <option value="3">Tidak ada</option>
+              </select>
+
+              <div class="row">
+                <button type="submit" class="btn">Lihat Hasil</button>
+                <button type="button" id="resetMental" class="btn btn-ghost">Reset</button>
+              </div>
+            </form>
+
+            <div id="mentalResult" class="result" aria-live="polite" hidden></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CURHAT ANONIM -->
+    <section id="curhat" class="section">
+      <div class="container">
+        <h2>Ruang Curhat Anonim</h2>
+
+        <div class="grid">
+          <div class="card">
+            <p>
+              Kami percaya setiap perasaan layak didengar.
+              Di sini, kamu bisa bercerita tanpa menyebutkan identitas.
+            </p>
+            <p class="muted">
+              Untuk versi offline ini, curhat disimpan <strong>di perangkatmu sendiri</strong> (localStorage), bukan dikirim ke server.
+              Kalau suatu saat mau online, nanti tinggal sambungkan ke backend.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title">Tulis Curhat</h3>
+
+            <form id="curhatForm" class="form">
+              <label for="nama">Nama (opsional)</label>
+              <input id="nama" type="text" placeholder="Anonim" />
+
+              <label for="curhatText">Curhatan</label>
+              <textarea id="curhatText" rows="5" placeholder="Tulis ceritamu di sini..." required></textarea>
+
+              <div class="row">
+                <button type="submit" class="btn">Kirim (Simpan)</button>
+                <button type="button" id="clearCurhat" class="btn btn-ghost">Hapus Semua</button>
+              </div>
+            </form>
+
+            <div class="divider"></div>
+
+            <h4 class="subhead">Daftar Curhat (Lokal)</h4>
+            <div id="curhatList" class="list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHALLENGE -->
+    <section id="challenge" class="section alt">
+      <div class="container">
+        <h2>Challenge Positif Remaja</h2>
+
+        <div class="grid">
+          <div class="card">
+            <h3>🌱 7 Hari Kenal Diri Sendiri</h3>
+            <p>Refleksi kecil setiap hari untuk mengenal dirimu lebih dalam.</p>
+            <button class="btn" data-challenge="kenaldiri">Ikut Challenge</button>
+
+            <div class="divider"></div>
+            <div class="progress">
+              <div class="progress-top">
+                <span class="muted">Progress</span>
+                <span id="kenaldiriCount" class="pill">0/7</span>
+              </div>
+              <div class="checkgrid" id="kenaldiriGrid"></div>
+              <div class="row">
+                <button class="btn btn-ghost small" data-reset-challenge="kenaldiri">Reset</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>✨ 1 Hari 1 Hal Baik</h3>
+            <p>Melatih diri melakukan hal sederhana yang berdampak positif.</p>
+            <button class="btn" data-challenge="halbaik">Ikut Challenge</button>
+
+            <div class="divider"></div>
+            <div class="progress">
+              <div class="progress-top">
+                <span class="muted">Progress</span>
+                <span id="halbaikCount" class="pill">0/7</span>
+              </div>
+              <div class="checkgrid" id="halbaikGrid"></div>
+              <div class="row">
+                <button class="btn btn-ghost small" data-reset-challenge="halbaik">Reset</button>
+              </div>
+              <p class="muted tiny">Catatan: contoh ini dibuat 7 hari juga biar konsisten. Nanti bisa kamu ubah jadi 30 hari, dll.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card note">
+          <strong>Catatan penting:</strong>
+          Kalau kamu merasa butuh bantuan segera, coba hubungi orang tepercaya di sekitarmu atau layanan profesional setempat.
+          Website ini hanya edukatif.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <p>© 2025 GenRe Banda Aceh</p>
+      <p class="muted">
+        Website ini bersifat edukatif dan bukan pengganti tenaga profesional.
+      </p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
