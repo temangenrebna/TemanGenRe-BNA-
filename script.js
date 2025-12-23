@@ -1,12 +1,20 @@
-// ===== Firebase: Curhat Publik + Balasan Anonim (Realtime) =====
+// ===== Firebase: Curhat Publik Realtime =====
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-import {
-  getFirestore, collection, addDoc, serverTimestamp,
-  query, orderBy, onSnapshot, doc, updateDoc, arrayUnion
-} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  serverTimestamp,
+  query,
+  orderBy,
+  onSnapshot,
+  doc,
+  updateDoc,
+  arrayUnion
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-// === Firebase Config (punya kamu) ===
+// ===== Firebase Config (FIX API KEY) =====
 const firebaseConfig = {
   apiKey: "AIzaSyBzPoqQI9ts-t_4EZOEDW-XEJBypabzNyw",
   authDomain: "temangenre-bna.firebaseapp.com",
@@ -18,99 +26,74 @@ const firebaseConfig = {
 
 // Init Firebase
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 const auth = getAuth(app);
+const db = getFirestore(app);
+
+// Anonymous login
 await signInAnonymously(auth);
+console.log("Anonymous login success");
 
-// Helper
-const $ = (s) => document.querySelector(s);
-function esc(s){
-  return String(s).replace(/[&<>"']/g, m => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-  }[m]));
-}
-function fmt(t){
-  try {
-    return t?.toDate().toLocaleString("id-ID",{dateStyle:"medium",timeStyle:"short"});
-  } catch { return ""; }
-}
+// ===== ELEMENTS =====
+const form = document.getElementById("curhatForm");
+const namaInput = document.getElementById("nama");
+const textInput = document.getElementById("curhatText");
+const list = document.getElementById("curhatList");
 
-// Element
-const form = $("#curhatForm");
-const list = $("#curhatList");
-
-// Kirim curhat
-form?.addEventListener("submit", async (e)=>{
+// ===== SUBMIT CURHAT =====
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const name = $("#nama")?.value.trim() || "Anonim";
-  const text = $("#curhatText")?.value.trim();
-  if(!text) return;
 
-  $("#curhatText").value = "";
-  await addDoc(collection(db,"curhat"),{
-    name, text,
-    createdAt: serverTimestamp(),
-    replies:[]
+  const nama = namaInput.value || "Anonim";
+  const text = textInput.value.trim();
+  if (!text) return;
+
+  await addDoc(collection(db, "curhat"), {
+    nama,
+    text,
+    replies: [],
+    createdAt: serverTimestamp()
   });
+
+  textInput.value = "";
 });
 
-// Ambil & tampilkan curhat realtime
-const q = query(collection(db,"curhat"), orderBy("createdAt","desc"));
-onSnapshot(q,(snap)=>{
-  if(!snap.size){
-    list.innerHTML = `<div class="muted">Belum ada curhat.</div>`;
-    return;
-  }
+// ===== TAMPILKAN CURHAT REALTIME =====
+const q = query(collection(db, "curhat"), orderBy("createdAt", "desc"));
 
-  list.innerHTML = snap.docs.map(d=>{
-    const c = d.data();
-    const repliesHTML = (c.replies||[]).map(r=>`
-      <div class="reply">
-        <div class="meta">
-          <span class="who">${esc(r.name||"Anonim")}</span>
-          <span class="muted">${new Date(r.at).toLocaleString("id-ID")}</span>
-        </div>
-        <div>${esc(r.text)}</div>
+onSnapshot(q, (snapshot) => {
+  list.innerHTML = "";
+
+  snapshot.forEach((docSnap) => {
+    const data = docSnap.data();
+
+    const div = document.createElement("div");
+    div.className = "item";
+
+    div.innerHTML = `
+      <strong>${data.nama}</strong>
+      <p>${data.text}</p>
+
+      <div class="replies">
+        ${(data.replies || []).map(r => `<div class="reply">💬 ${r}</div>`).join("")}
       </div>
-    `).join("");
 
-    return `
-      <div class="item">
-        <div class="item-top">
-          <span class="badge">${esc(c.name)}</span>
-          <span class="muted">${fmt(c.createdAt)}</span>
-        </div>
-
-        <div>${esc(c.text)}</div>
-
-        <div class="replybox">
-          ${repliesHTML || `<div class="muted tiny">Belum ada balasan</div>`}
-
-          <form class="reply-form" data-id="${d.id}">
-            <input placeholder="Nama (opsional)">
-            <input placeholder="Balas..." required>
-            <button class="btn" type="submit">Balas</button>
-          </form>
-        </div>
-      </div>
+      <input placeholder="Balas anonim..." />
+      <button>Balas</button>
     `;
-  }).join("");
 
-  // Handler balasan
-  document.querySelectorAll(".reply-form").forEach(f=>{
-    if(f._bind) return;
-    f._bind = true;
-    f.addEventListener("submit", async (e)=>{
-      e.preventDefault();
-      const id = f.dataset.id;
-      const name = f.children[0].value || "Anonim";
-      const text = f.children[1].value;
-      if(!text) return;
+    const input = div.querySelector("input");
+    const btn = div.querySelector("button");
 
-      f.children[1].value = "";
-      await updateDoc(doc(db,"curhat",id),{
-        replies: arrayUnion({ name, text, at: Date.now() })
+    btn.onclick = async () => {
+      if (!input.value.trim()) return;
+
+      await updateDoc(doc(db, "curhat", docSnap.id), {
+        replies: arrayUnion(input.value)
       });
-    });
+
+      input.value = "";
+    };
+
+    list.appendChild(div);
   });
 });
