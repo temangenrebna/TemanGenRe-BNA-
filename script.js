@@ -15,13 +15,15 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
 // ===== Firebase Config (FIX API KEY) =====
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyBzPoqQI9ts-t_4EZOEDW-XEJBypabzNyw",
+  apiKey: "AIzaSyBzPoqQI9ts-t_4EZOEDW-XEJBYpabzNyw",
   authDomain: "temangenre-bna.firebaseapp.com",
   projectId: "temangenre-bna",
   storageBucket: "temangenre-bna.firebasestorage.app",
-  messagingSenderId: "102543073872",
-  appId: "1:102543073872:web:edb8f8709457fa2399f755"
+  messagingSenderId: "1025430753872",
+  appId: "1:1025430753872:web:edb8f8709457fa2399f755",
+  measurementId: "G-TV094CSPT4"
 };
 
 // Init Firebase
