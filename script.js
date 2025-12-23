@@ -15,7 +15,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
 // ===== Firebase Config (FIX API KEY) =====
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyBzPoqQI9ts-t_4EZOEDW-XEJBYpabzNyw",
   authDomain: "temangenre-bna.firebaseapp.com",
